@@ -21,6 +21,10 @@ class Estoque:
             return editarEstoque()
         else:    
             self.qnt = self.qnt - qnt
+            
+
+    def modificarPreco(self, preco):
+        self.preco = preco
     
     def __str__(self):
         return f"| Codigo: {self.codigo} | Nome do produto: {self.produto} | Categoria: {self.categoria} | Quantidade: {self.qnt} | Preço: {self.preco} | Preço Total: {self.totalPreco} no estoque |"
@@ -59,6 +63,7 @@ def menu():
     print("Digite [5] Cunsulta pelo Nome do Produto")
     print("Digite [6] Visualizar Histórico de Movimentação")
     print("Digite [7] Editar Preço do Produto")# Precisa montar a Função dentro da class e fora
+    print("Digite [8] Deletar Produto do Sistema")
     print("Digite [0] Para Finalizar o Programa\n")
     
     numero = int(input("Digite: "))
@@ -75,7 +80,7 @@ def menu():
     if numero == 6:
         return historicoMovimentacao()
     if numero == 7:
-        print("PRECISA MONTAR A FUNÇÃO")
+        return alterarPreco()
     if numero == 0:
         return print("Programa Finalizado")
 
@@ -91,8 +96,14 @@ def cadastrar_produto():
     novoCodigo = random.sample(range(999999), k=1)[0] #Gerando código no momento de cadastrar um novo produto
     novoProduto = Estoque(novoCodigo,nomeProduto,qnt, preco,categoria)
     estoqueCompleto.append(novoProduto)
-    print(f"\nCodigo gerado: {novoCodigo}, Nome do Produto: {nomeProduto} foi adicionado com sucesso!!")
-    return retornarMenuOuFinalizar()
+    print(f"\nCodigo gerado: {novoCodigo}, Nome do Produto: {nomeProduto} foi adicionado com sucesso!!\n")
+    print("Digite [1] Adicionar outro Produto")
+    print("Digite [0] Retornar ao Menu")
+    cliente = int(input("Digite: "))
+    if cliente == 1:
+        return cadastrar_produto()
+    if cliente == 0:
+        return menu()
 
 def retornarMenuOuFinalizar():
     print("\nDigite [0] Finalizar Programa")
@@ -153,6 +164,20 @@ def deletarProdutoEstoque():
        return print(f"O Produto com Código {codigo} não foi encontrado")
 
 def historicoMovimentacao():
-    print("PRECISA MONTAR A LOGICA")
+    print("PRECISA MONTAR A LOGICA") # Essa função vai pegar as movimentações no estoque. gerando um extrato de todo o processo de entrada e saida de produto, vou deixar uma forma igual extrato bancario mostrando positivo ou negativo no estoque, 
+    #Dependendo implementarImport DATE e entender os principais metodos, mas precisa add esses metodos na funções de controle de estoque
+
+def alterarPreco():
+    codigo = pesquisaCodigo()
+    for produto in estoqueCompleto:
+        if codigo == produto.codigo:
+            precoNovo = float(input("Digite o Novo Preço: "))
+            precoAntigo = produto.preco
+            produto.modificarPreco(precoNovo)
+            print(f"Preço alterado! De {precoAntigo} Para {produto.preco}")
+            return menu()
+    else:
+        print("Código não encontrado!")
+        return menu()
 
 menu()
