@@ -10,8 +10,46 @@ class Estoque:
         self.totalPreco = qnt * preco
         self.movimentacao = True #usar o bollean para intentificar a movimentação?
 
+    def entradaQnt(self, qnt):
+        self.qnt = self.qnt + qnt
+    
+    def saidaQnt(self,qnt):
+        if qnt > self.qnt:
+            print("*Quantidade de Retirada Invalida!*")
+            print(f"Total em Estoque: {self.qnt}")
+            print("\nDigite novamente o codigo do Produto")
+            return editarEstoque()
+        else:    
+            self.qnt = self.qnt - qnt
+    
     def __str__(self):
         return f"| Codigo: {self.codigo} | Nome do produto: {self.produto} | Categoria: {self.categoria} | Quantidade: {self.qnt} | Preço: {self.preco} | Preço Total: {self.totalPreco} no estoque |"
+
+def editarEstoque(): #Essa função o cliente vai digitar o codigo e a quantidade que ele vai adicionar ou tirar do estoque, e caso ele queira alterar o valor do preço do produto
+    codigo = pesquisaCodigo()
+    for verificar in estoqueCompleto:
+        if verificar.codigo == codigo: #Aparecer um Menu com adicionar,Tirar ou alterar o valor
+           print(f"\nCódigo {codigo} encontrado")
+           print(f"Nome do Produto: {verificar.produto}--Quantidade Atual: {verificar.qnt}---Preço atual: {verificar.preco}\n")
+           print("Digite [1] Para cadastrar *Entrada* no Estoque")
+           print("Digite [2] Para Cadastrar *Saida* no Estoque")
+           print("Digite [0] Retornar para o *Menu*")
+           decisao = int(input("Digite:"))
+           if decisao == 1:
+                entradaEstoque = int(input("Digite o Valor de entrada: "))
+
+                valorAntigo = verificar.qnt #Da para usar essa variavel para historico? Testar
+
+                verificar.entradaQnt(entradaEstoque)
+                print(verificar) #Testar se essa logica funcionou e alterou na classe
+           if decisao == 2:
+                saidaEstoque = int(input("Digite o Valor de Saída: "))
+                verificar.saidaQnt(saidaEstoque)
+                print(verificar)
+           if decisao == 0:
+                return menu()
+        else:
+            print("Código não encontrado")
 
 def menu():
     print("\nDigite [1] Cadastrar Novo Produto")
@@ -20,25 +58,24 @@ def menu():
     print("Digite [4] Consulta pelo Código")
     print("Digite [5] Cunsulta pelo Nome do Produto")
     print("Digite [6] Visualizar Histórico de Movimentação")
+    print("Digite [7] Editar Preço do Produto")# Precisa montar a Função dentro da class e fora
     print("Digite [0] Para Finalizar o Programa\n")
     
     numero = int(input("Digite: "))
     if numero == 1:
        return cadastrar_produto()
-    
     if numero == 2:
         return exibirTodosProdutos()
-
     if numero == 3:
        return editarEstoque()
-
     if numero == 4:
         return consultarProdutoCodigo()
-    
     if numero == 5:
         return consultarProdutoNome()
-    
-    #PRECISO MONTAR A FUNÇÃO DE HISTORICO DE MOVIMENTAÇÃO digito 6
+    if numero == 6:
+        return historicoMovimentacao()
+    if numero == 7:
+        print("PRECISA MONTAR A FUNÇÃO")
     if numero == 0:
         return print("Programa Finalizado")
 
@@ -46,7 +83,7 @@ estoqueCompleto = []
 
 movimentacaoEstoque = [] #No final adicionar esse Array em uma Tupla
 
-def cadastrar_produto():
+def cadastrar_produto(): 
     nomeProduto = input("Qual nome do produto? ")
     qnt = int(input("Quantidade : "))
     preco = float(input("Preço: "))
@@ -56,7 +93,6 @@ def cadastrar_produto():
     estoqueCompleto.append(novoProduto)
     print(f"\nCodigo gerado: {novoCodigo}, Nome do Produto: {nomeProduto} foi adicionado com sucesso!!")
     return retornarMenuOuFinalizar()
-
 
 def retornarMenuOuFinalizar():
     print("\nDigite [0] Finalizar Programa")
@@ -76,10 +112,7 @@ def retornarMenuOuFinalizar():
                 return menu()
             if digito == 0:
                 return print("Programa finalizado")
-    
-       
-    
-
+          
 def exibirTodosProdutos():
     for produto in estoqueCompleto:
         print(produto)
@@ -88,7 +121,7 @@ def exibirTodosProdutos():
 def pesquisaCodigo(): #Reutilizando metodo
     codigoDoProduto = int(input("Digite o Código: "))
     return codigoDoProduto
-    
+
 def consultarProdutoCodigo():
     codigo =  pesquisaCodigo()
     for produto in estoqueCompleto:
@@ -98,14 +131,6 @@ def consultarProdutoCodigo():
     else:
         print(f"\nO Produto com Código {codigo} não foi encontrado")
         return retornarMenuOuFinalizar()
-
-def editarEstoque(): #Essa função o cliente vai digitar o codigo e a quantidade que ele vai adicionar ou tirar do estoque, e caso ele queira alterar o valor do preço do produto
-    codigo = pesquisaCodigo()
-    for verificar in estoqueCompleto:
-        if verificar.codigo == codigo: #Aparecer um Menu com adicionar,Tirar ou alterar o valor
-            print("Código encontrado")
-        else:
-            print("Código não encontrado")
 
 def consultarProdutoNome():
     nomeProduto = input("Nome do Produto: ")
@@ -127,7 +152,7 @@ def deletarProdutoEstoque():
     else:
        return print(f"O Produto com Código {codigo} não foi encontrado")
 
-menu()
-#MONTAR UM INPUT COM VARIOS IF JÁ QUE PYTHON NÃO TEM SWICH
+def historicoMovimentacao():
+    print("PRECISA MONTAR A LOGICA")
 
-#Da pra fazer bonitinho |---------|
+menu()
